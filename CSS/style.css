@@ -12,3 +12,12 @@ h1
 {
 	font-size: 38px;
 }
+#titles
+{
+	font-family: 'Jost', sans-serif;
+}
+#bodyText 
+{
+	font-family: 'Jost', sans-serif;
+	font-family: 'Merriweather', serif;
+}
