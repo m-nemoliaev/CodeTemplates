@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrolling Line Graph</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #graph-section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        #chart-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .line {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="graph-section">
+    <p>This is the section where the graph will transition</p>
+</div>
+
+<div id="chart-container">
+    <svg id="line-chart" width="80%" height="80%"></svg>
+</div>
+
+<script>
+    // Sample data for the line chart
+    const data = [
+        { x: 0, y: 30 },
+        { x: 50, y: 80 },
+        { x: 100, y: 40 },
+        { x: 150, y: 120 },
+        { x: 200, y: 60 }
+    ];
+
+    // Set up SVG container
+    const svg = d3.select("#line-chart");
+    const width = parseInt(svg.style("width"));
+    const height = parseInt(svg.style("height"));
+
+    // Create a line function
+    const line = d3.line()
+        .x(d => d.x)
+        .y(d => d.y);
+
+    // Append the line to the SVG
+    svg.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line);
+
+    // Variable to track whether the initial intersection has occurred
+    let initialIntersection = false;
+
+    // Variable to track whether the user has scrolled down
+    let hasScrolled = false;
+
+    // Delay setting up the Intersection Observer to avoid immediate triggering
+    setTimeout(() => {
+        window.addEventListener('scroll', () => {
+            hasScrolled = true;
+        });
+
+        // Use Intersection Observer to trigger the transition
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!initialIntersection && hasScrolled && entry.isIntersecting && entry.boundingClientRect.top <= 0) {
+                    svg.transition()
+                        .duration(1000)
+                        .attr("width", "100%")
+                        .attr("height", "100%");
+                    initialIntersection = true;
+                }
+            });
+        }, {
+            threshold: 0.5, // Trigger the transition when 50% of the target element is in view
+        });
+
+        observer.observe(document.getElementById("graph-section"));
+    }); // Adjust the delay as needed
+</script>
+
+</body>
+</html>

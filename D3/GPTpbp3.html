@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>D3.js Animated Line Chart</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <style>
+    body {
+        height: 1500px;
+    }
+    path {
+      fill: none;
+      stroke: rgba(75, 192, 192, 1);
+      stroke-width: 2px;
+    }
+
+    /* Set the position of the SVG container to the bottom of the page */
+    svg {
+      position: absolute;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+<button id="activateChart">Activate Chart</button>
+
+<script>
+  // Sample data for lines
+  var data = {
+    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    datasets: [{
+      label: 'Sample Data',
+      data: [10, 20, 15, 25, 30, 22, 18, 12, 28, 35],
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2,
+      fill: false
+    }]
+  };
+
+  // Extract x and y values from the dataset
+  var linesData = data.labels.map(function(label, index) {
+    return { x: index * 50, y: data.datasets[0].data[index] };
+  });
+
+  // Create an SVG container
+  var svg = d3.select("body").append("svg") // Append SVG to the body
+      .attr("width", 600)
+      .attr("height", 300);
+
+  // Create a line function
+  var line = d3.line()
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; });
+
+  // Append a group for the lines
+  var linesGroup = svg.append("g");
+
+  // Flag to track whether the drawing function has been activated
+  var isActivated = false;
+
+  // Function to draw lines sequentially with delay
+  function drawLine(index) {
+    linesGroup.append("path")
+      .data([linesData.slice(0, index + 1)])
+      .attr("d", line)
+      .attr("fill", "none")
+      .attr("stroke", 'rgba(75, 192, 192, 1)')
+      .attr("stroke-width", 2)
+      .style("stroke-dasharray", function() {
+        var length = this.getTotalLength();
+        return length + " " + length;
+      })
+      .style("stroke-dashoffset", function() {
+        return this.getTotalLength();
+      })
+      .transition()
+        .duration(1000) // Duration for each line to appear
+        .delay(300) // Delay before drawing the next line
+        .style("stroke-dashoffset", 0)
+        .on("end", function() {
+          // Draw the next line after a delay
+          if (index < linesData.length - 1) {
+            drawLine(index + 1);
+          }
+        });
+  }
+
+  // Button click event listener
+  document.getElementById('activateChart').addEventListener('click', function() {
+    if (!isActivated) {
+      // Start drawing the first line when the button is clicked
+      drawLine(0);
+      isActivated = true; // Set the flag to true
+      // Start observing the SVG container for scrolling
+      observer.observe(chartContainer);
+    }
+  });
+
+  // Intersection Observer to activate the chart on scrolling
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && isActivated) {
+        // Start drawing the first line when scrolling past the chart container
+        drawLine(0);
+        observer.disconnect(); // Disconnect the observer once activated
+      }
+    });
+  }, { threshold: 0.1 }); // Trigger when 10% of the target is visible
+
+  // Target the SVG container
+  var chartContainer = document.querySelector("svg");
+
+</script>
+
+</body>
+</html>

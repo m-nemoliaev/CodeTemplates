@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>D3.js Colored Dots Example</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <style>
+    circle {
+      fill: steelblue; /* Default color */
+    }
+  </style>
+</head>
+<body>
+
+<h1>D3.js Colored Dots Example</h1>
+
+<svg width="800" height="200"></svg>
+
+<script>
+  // Sample data for dot colors
+  var dotColors = ["red", "green", "blue", "orange", "purple"];
+
+  // Create an SVG container
+  var svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height");
+
+  // Create dots
+  svg.selectAll("circle")
+    .data(dotColors)
+    .enter().append("circle")
+      .attr("cx", function(d, i) { return (i + 1) * 150; }) // Position dots horizontally
+      .attr("cy", height / 2) // Position dots vertically at the center
+      .attr("r", 30) // Radius (half of the diameter)
+      .style("fill", function(d) { return d; }); // Set dot color based on the data
+
+</script>
+
+</body>
+</html>
