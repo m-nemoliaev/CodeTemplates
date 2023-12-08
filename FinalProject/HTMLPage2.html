@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Webpage Title</title>
+  <!-- Include D3.js library -->
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    #question-container {
+      margin-bottom: 20px;
+    }
+
+    #visualization-container {
+      width: 100%;
+      overflow-x: auto; /* Enable horizontal scrolling if images exceed the container width */
+      white-space: nowrap; /* Prevent images from wrapping to the next line */
+      margin-bottom: 20px;
+    }
+
+    #visualization-container img {
+      width: 200px; /* Adjust the width based on your preference */
+      height: auto; /* Maintain the aspect ratio */
+      margin-right: 10px; /* Adjust the spacing between images */
+    }
+
+    #answer-container {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Style for the Toggle Images button */
+    #toggleButton {
+      cursor: pointer;
+      padding: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    /* Style for the Hover for Answer button */
+    #revealAnswerButton {
+      display: none;
+      cursor: pointer;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: opacity 0.5s ease; /* Smooth transition effect */
+    }
+
+    #revealAnswerButton.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="question-container">
+    <h1>Question</h1>
+    <p>Here goes your question description or prompt.</p>
+  </div>
+
+  <div id="visualization-container">
+    <h1>Visualizations</h1>
+    <!-- Images will be appended here dynamically -->
+  </div>
+
+  <!-- Button to toggle image visibility -->
+  <button id="toggleButton">Toggle Images</button>
+
+  <div id="answer-container">
+    <h2>Answer</h2>
+    <p>Here goes the answer or additional information related to the question.</p>
+  </div>
+
+  <!-- New button to reveal answer on hover -->
+  <button id="revealAnswerButton">Hover for Answer</button>
+
+  <script>
+    // Example JavaScript code for image toggling
+    document.getElementById('toggleButton').addEventListener('click', function() {
+      toggleImages();
+      showRevealAnswerButton();
+    });
+
+    function toggleImages() {
+      console.log("Button clicked");
+
+      // Select the visualization container
+      var visualizationContainer = d3.select('#visualization-container');
+
+      // Toggle image visibility directly
+      visualizationContainer.selectAll('img')
+        .classed('hidden', function() {
+          return !d3.select(this).classed('hidden');
+        });
+    }
+
+    // Example code to dynamically append images to the visualization container
+    var imagePaths = ['image1.png', 'image2.png', 'image3.png'];
+
+    d3.select('#visualization-container')
+      .selectAll('img')
+      .data(imagePaths)
+      .enter()
+      .append('img')
+      .attr('src', function(d) { return d; })
+      .attr('class', 'hidden'); // Initially hide images
+
+    // Example JavaScript code for revealing the answer on hover
+    document.getElementById('revealAnswerButton').addEventListener('mouseover', revealAnswer);
+
+    function revealAnswer() {
+      // Display the answer container
+      d3.select('#answer-container').style('display', 'block');
+    }
+
+    // Show the "Hover for Answer" button after the first button is pressed
+    function showRevealAnswerButton() {
+      var revealAnswerButton = d3.select('#revealAnswerButton');
+      revealAnswerButton.style('display', 'inline-block');
+
+      // Trigger reflow to enable the transition effect
+      void revealAnswerButton.node().offsetWidth;
+
+      // Apply the 'show' class to initiate the opacity transition
+      revealAnswerButton.classed('show', true);
+    }
+  </script>
+
+</body>
+</html>
