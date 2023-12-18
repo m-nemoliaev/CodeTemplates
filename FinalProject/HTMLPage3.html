@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 40px;
+            transition: margin 0.5s;
+            overflow: hidden;
+            text-align: center;
+            width: 60%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #images-container {
+            text-align: center;
+            display: none;
+        }
+
+        #images-container img {
+            width: 100%;
+            height: auto;
+            max-height: 100px; /* Adjust the max height as needed */
+        }
+
+        #final-paragraph {
+            display: none;
+        }
+
+        button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="box" id="box1">
+            <h1>h1</h1>
+            <p>p</p>
+        </div>
+
+        <div class="box" id="box2">
+            <h1>h1</h1>
+            <p>p</p>
+        </div>
+
+        <div class="box" id="box3">
+            <h1>h1</h1>
+            <p>p</p>
+            <button onclick="toggleImages(this)">Toggle Images</button>
+            <div id="images-container">
+                <img src="image1.png" alt="Image 1">
+                <img src="image2.png" alt="Image 2">
+                <img src="image3.png" alt="Image 3">
+            </div>
+        </div>
+
+        <div class="box" id="box4">
+            <h1>h1</h1>
+            <p>p</p>
+            <button onmouseover="revealFinalParagraph(this)">Hover to reveal final paragraph</button>
+        </div>
+
+        <div class="box" id="box5">
+            <h1>h1</h1>
+            <p>p</p>
+            <div id="final-paragraph">
+                <h1>h1</h1>
+                <p>p</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleImages(button) {
+            const imagesContainer = button.nextElementSibling;
+            imagesContainer.style.display = imagesContainer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function revealFinalParagraph(button) {
+            const finalParagraph = button.nextElementSibling;
+            finalParagraph.style.display = 'block';
+        }
+
+        const boxes = document.querySelectorAll('.box');
+        boxes.forEach(box => {
+            box.addEventListener('click', function () {
+                const button = this.querySelector('button');
+                if (button) {
+                    const content = button.nextElementSibling;
+                    content.style.marginBottom = content.style.marginBottom === '40px' ? '-1000px' : '40px';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

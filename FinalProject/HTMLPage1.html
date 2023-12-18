@@ -1,112 +1,106 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Webpage Title</title>
-  <!-- Include D3.js library -->
-  <script src="https://d3js.org/d3.v6.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
 
-    #question-container {
-      margin-bottom: 20px;
-    }
+        .box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 40px;
+            transition: margin 0.5s;
+            overflow: hidden;
+            text-align: center;
+            width: 60%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    #visualization-container {
-      width: 100%;
-      overflow-x: auto; /* Enable horizontal scrolling if images exceed the container width */
-      white-space: nowrap; /* Prevent images from wrapping to the next line */
-      margin-bottom: 20px;
-    }
+        #images-container {
+            text-align: center;
+            display: none;
+        }
 
-    #visualization-container img {
-      width: 200px; /* Adjust the width based on your preference */
-      height: auto; /* Maintain the aspect ratio */
-      margin-right: 10px; /* Adjust the spacing between images */
-    }
+        #final-paragraph {
+            display: none;
+        }
 
-    #answer-container {
-      display: none;
-      margin-bottom: 20px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    /* Style for the new button to reveal the answer on hover */
-    #revealAnswerButton {
-      cursor: pointer;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
+        button {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="question-container">
-    <h1>Question Title</h1>
-    <p>Here goes your question description or prompt.</p>
-  </div>
+    <div class="box" id="box1">
+        <h1>h1</h1>
+        <p>p</p>
+    </div>
 
-  <div id="visualization-container">
-    <!-- Images will be appended here dynamically -->
-  </div>
+    <div class="box" id="box2">
+        <h1>h1</h1>
+        <p>p</p>
+    </div>
 
-  <!-- Button to toggle image visibility -->
-  <button id="toggleButton">Toggle Images</button>
+    <div class="box" id="box3">
+        <h1>h1</h1>
+        <p>p</p>
+        <button onclick="toggleImages()">Toggle Images</button>
+        <div id="images-container">
+            <img src="image1.png" alt="Image 1">
+            <img src="image2.png" alt="Image 2">
+            <img src="image3.png" alt="Image 3">
+        </div>
+    </div>
 
-  <div id="answer-container">
-    <h2>Answer</h2>
-    <p>Here goes the answer or additional information related to the question.</p>
-  </div>
+    <div class="box" id="box4">
+        <h1>h1</h1>
+        <p>p</p>
+        <button onmouseover="revealFinalParagraph()">Hover to reveal final paragraph</button>
+    </div>
 
-  <!-- New button to reveal answer on hover -->
-  <button id="revealAnswerButton">Hover for Answer</button>
+    <div class="box" id="box5">
+        <h1>h1</h1>
+        <p>p</p>
+        <div id="final-paragraph">
+            <h1>h1</h1>
+            <p>p</p>
+        </div>
+    </div>
 
-  <script>
-    // Example JavaScript code for image toggling
-    document.getElementById('toggleButton').addEventListener('click', toggleImages);
+    <script>
+        let currentIndex = 1;
 
-    function toggleImages() {
-      console.log("Button clicked");
+        function toggleImages() {
+            const imagesContainer = document.getElementById('images-container');
+            imagesContainer.style.display = imagesContainer.style.display === 'none' ? 'block' : 'none';
+        }
 
-      // Select the visualization container
-      var visualizationContainer = d3.select('#visualization-container');
+        function revealFinalParagraph() {
+            const finalParagraph = document.getElementById('final-paragraph');
+            finalParagraph.style.display = 'block';
+        }
 
-      // Toggle image visibility directly
-      visualizationContainer.selectAll('img')
-        .classed('hidden', function() {
-          return !d3.select(this).classed('hidden');
+        const boxes = document.querySelectorAll('.box');
+        document.addEventListener('click', function () {
+            if (currentIndex < boxes.length) {
+                boxes[currentIndex - 1].style.marginBottom = '-1000px';
+                boxes[currentIndex].style.marginBottom = '40px';
+                currentIndex++;
+            }
         });
-    }
-
-    // Example code to dynamically append images to the visualization container
-    var imagePaths = ['image1.jpg', 'image2.jpg', 'image3.jpg'];
-
-    d3.select('#visualization-container')
-      .selectAll('img')
-      .data(imagePaths)
-      .enter()
-      .append('img')
-      .attr('src', function(d) { return d; })
-      .attr('class', 'hidden'); // Initially hide images
-
-    // Example JavaScript code for revealing the answer on hover
-    document.getElementById('revealAnswerButton').addEventListener('mouseover', revealAnswer);
-
-    function revealAnswer() {
-      // Display the answer container
-      d3.select('#answer-container').style('display', 'block');
-    }
-  </script>
-
+    </script>
 </body>
 </html>
